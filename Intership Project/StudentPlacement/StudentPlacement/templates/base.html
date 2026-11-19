@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Placement Portal</title>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+
+<body>
+
+{% if session.get('student_id') or session.get('admin') %}
+
+<div class="app-layout">
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <div class="brand-text">
+                <h5>PlacementPro</h5>
+                <span>Career Management</span>
+            </div>
+        </div>
+
+        <div class="sidebar-label">MAIN MENU</div>
+
+        <nav class="sidebar-nav">
+
+            {% if session.get('student_id') %}
+
+            <a href="/dashboard" class="sidebar-link {% if request.path == '/dashboard' %}active{% endif %}">
+                <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+            </a>
+
+            <a href="/profile" class="sidebar-link {% if request.path == '/profile' %}active{% endif %}">
+                <i class="bi bi-person-circle"></i><span>My Profile</span>
+            </a>
+
+            <a href="/jobs" class="sidebar-link {% if request.path == '/jobs' or request.path.startswith('/jobs/') %}active{% endif %}">
+                <i class="bi bi-briefcase-fill"></i><span>Job Openings</span>
+            </a>
+
+            <a href="/applications" class="sidebar-link {% if request.path == '/applications' %}active{% endif %}">
+                <i class="bi bi-file-earmark-text-fill"></i><span>My Applications</span>
+            </a>
+
+            {% elif session.get('admin') %}
+
+            <a href="/admin" class="sidebar-link {% if request.path == '/admin' %}active{% endif %}">
+                <i class="bi bi-grid-1x2-fill"></i><span>Admin Dashboard</span>
+            </a>
+
+            {% endif %}
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-label">ACCOUNT</div>
+
+            {% if session.get('student_id') %}
+            <a href="/logout" class="sidebar-link logout-link">
+                <i class="bi bi-box-arrow-right"></i><span>Logout</span>
+            </a>
+            {% elif session.get('admin') %}
+            <a href="/admin/logout" class="sidebar-link logout-link">
+                <i class="bi bi-box-arrow-right"></i><span>Admin Logout</span>
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-footer-icon">
+                <i class="bi bi-lightning-charge-fill"></i>
+            </div>
+            <div>
+                <strong>PlacementPro</strong>
+                <small>Student Career Portal</small>
+            </div>
+        </div>
+
+    </aside>
+
+    <div class="main-wrapper">
+
+        <header class="topbar">
+
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div class="topbar-heading">
+                <span class="topbar-subtitle">WELCOME BACK</span>
+                <h5>{% if session.get('admin') %}Admin Panel{% else %}Student Portal{% endif %}</h5>
+            </div>
+
+            <div class="topbar-right">
+                <div class="topbar-badge">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Portal Active</span>
+                </div>
+                <div class="topbar-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+            </div>
+
+        </header>
+
+{% else %}
+
+<div class="public-layout">
+
+    <nav class="public-navbar">
+        <a href="/" class="public-brand">
+            <span class="brand-icon"><i class="bi bi-mortarboard-fill"></i></span>
+            <span>PlacementPro</span>
+        </a>
+
+        <div class="public-nav-links">
+            <a href="/register">Register</a>
+            <a href="/login">Login</a>
+            <a href="/admin/login" class="public-admin-link">Admin</a>
+        </div>
+    </nav>
+
+{% endif %}
+
+    <main class="{% if session.get('student_id') or session.get('admin') %}page-content{% else %}public-content{% endif %}">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show custom-alert" role="alert">
+                            <i class="bi bi-info-circle-fill"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+{% if session.get('student_id') or session.get('admin') %}
+
+        <footer class="app-footer">
+            <span>© 2026 PlacementPro</span>
+            <span>Student Placement Management System</span>
+        </footer>
+
+    </div>
+</div>
+
+{% else %}
+
+    <footer class="public-footer">
+        Student Placement Management System
+    </footer>
+
+</div>
+
+{% endif %}
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const sidebar = document.getElementById("sidebar");
+    const toggle = document.getElementById("sidebarToggle");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    if (toggle && sidebar && overlay) {
+        toggle.addEventListener("click", function () {
+            sidebar.classList.toggle("sidebar-open");
+            overlay.classList.toggle("overlay-active");
+        });
+
+        overlay.addEventListener("click", function () {
+            sidebar.classList.remove("sidebar-open");
+            overlay.classList.remove("overlay-active");
+        });
+    }
+</script>
+
+</body>
+</html>

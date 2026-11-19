@@ -1,0 +1,182 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <!-- LOGIN HEADER -->
+        <div class="login-header">
+
+            <div class="login-logo">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+
+            <span class="login-eyebrow">
+                {% if admin_mode %}
+                    ADMIN PORTAL
+                {% else %}
+                    STUDENT PORTAL
+                {% endif %}
+            </span>
+
+            <h1>
+                {% if admin_mode %}
+                    Admin Login
+                {% else %}
+                    Welcome Back!
+                {% endif %}
+            </h1>
+
+            <p>
+                {% if admin_mode %}
+                    Sign in to manage student placements.
+                {% else %}
+                    Sign in to continue your career journey.
+                {% endif %}
+            </p>
+
+        </div>
+
+
+        <!-- LOGIN FORM -->
+        <form method="post" class="modern-login-form">
+
+            <!-- USERNAME / EMAIL -->
+            <div class="modern-form-group">
+
+                <label class="modern-form-label">
+                    {% if admin_mode %}
+                        Username
+                    {% else %}
+                        Email Address
+                    {% endif %}
+                </label>
+
+                <div class="modern-input-wrapper">
+
+                    <i class="bi bi-person modern-input-icon"></i>
+
+                    <input
+                        class="modern-input"
+                        name="{% if admin_mode %}username{% else %}email{% endif %}"
+                        {% if not admin_mode %}type="email"{% else %}type="text"{% endif %}
+                        placeholder="{% if admin_mode %}Enter admin username{% else %}Enter your email address{% endif %}"
+                        autocomplete="{% if admin_mode %}username{% else %}email{% endif %}"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+            <div class="modern-form-group">
+
+                <label class="modern-form-label">
+                    Password
+                </label>
+
+                <div class="modern-input-wrapper">
+
+                    <i class="bi bi-lock modern-input-icon"></i>
+
+                    <input
+                        class="modern-input password-input"
+                        type="password"
+                        name="password"
+                        id="loginPassword"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required>
+
+                    <button type="button"
+                            class="password-toggle"
+                            onclick="toggleLoginPassword()"
+                            aria-label="Show or hide password">
+
+                        <i class="bi bi-eye" id="loginEyeIcon"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+            <button type="submit" class="modern-login-button">
+
+                <span>
+                    {% if admin_mode %}
+                        Login as Admin
+                    {% else %}
+                        Sign In
+                    {% endif %}
+                </span>
+
+                <i class="bi bi-arrow-right"></i>
+
+            </button>
+
+
+            <!-- FOOTER -->
+            {% if not admin_mode %}
+
+            <div class="login-form-footer">
+
+                <span>Don't have an account?</span>
+
+                <a href="/register">
+                    Create account
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </form>
+
+
+        <!-- SECURITY -->
+        <div class="login-security">
+
+            <i class="bi bi-shield-lock-fill"></i>
+
+            <span>Your login information is securely protected.</span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PASSWORD VISIBILITY -->
+<script>
+
+    function toggleLoginPassword() {
+
+        const password = document.getElementById("loginPassword");
+        const icon = document.getElementById("loginEyeIcon");
+
+        if (password.type === "password") {
+
+            password.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+
+        } else {
+
+            password.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+
+        }
+
+    }
+
+</script>
+
+{% endblock %}

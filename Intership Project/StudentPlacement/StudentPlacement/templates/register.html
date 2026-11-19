@@ -1,0 +1,407 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="registration-page">
+
+    <div class="registration-card">
+
+
+        <!-- HEADER -->
+        <div class="registration-header">
+
+            <div class="registration-logo">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+
+            <span class="registration-eyebrow">
+                STUDENT REGISTRATION
+            </span>
+
+            <h1>Create Your Account</h1>
+
+            <p>
+                Join our placement portal and discover career opportunities.
+            </p>
+
+        </div>
+
+
+        <!-- PROGRESS -->
+        <div class="registration-progress-section">
+
+            <div class="registration-progress-top">
+
+                <span>Required fields completion</span>
+
+                <strong id="registrationProgressText">0%</strong>
+
+            </div>
+
+            <div class="registration-progress">
+
+                <div class="registration-progress-bar"
+                     id="registrationProgressBar">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM -->
+        <form method="post"
+              class="modern-registration-form"
+              autocomplete="on"
+              id="registrationForm">
+
+
+            <!-- PERSONAL INFORMATION -->
+            <div class="registration-section">
+
+                <div class="registration-section-heading">
+
+                    <div class="registration-section-icon">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+
+                    <div>
+                        <h3>Personal Information</h3>
+                        <p>Tell us about yourself</p>
+                    </div>
+
+                </div>
+
+
+                <div class="registration-fields">
+
+                    {% for key,label in [
+                        ('registration_no','Registration Number'),
+                        ('first_name','First Name'),
+                        ('last_name','Last Name'),
+                        ('dob','Date of Birth'),
+                        ('location','Location'),
+                        ('education','Education')
+                    ] %}
+
+                    <div class="registration-field">
+
+                        <label for="field_{{ key }}" class="modern-form-label">
+
+                            {{ label }}
+
+                            {% if key in ['registration_no','first_name','last_name'] %}
+                                <span class="required-star">*</span>
+                            {% endif %}
+
+                        </label>
+
+                        <div class="modern-input-wrapper">
+
+                            <i class="bi
+                                {% if key == 'registration_no' %}bi-card-text
+                                {% elif key in ['first_name','last_name'] %}bi-person
+                                {% elif key == 'dob' %}bi-calendar
+                                {% elif key == 'location' %}bi-geo-alt
+                                {% else %}bi-mortarboard
+                                {% endif %}
+                                modern-input-icon">
+                            </i>
+
+                            <input
+                                id="field_{{ key }}"
+                                class="modern-input"
+                                name="{{ key }}"
+                                {% if key == 'dob' %}type="date"
+                                {% else %}type="text"{% endif %}
+                                value="{{ data.get(key,'') }}"
+                                placeholder="{% if key == 'registration_no' %}Enter registration number{% elif key == 'first_name' %}Enter first name{% elif key == 'last_name' %}Enter last name{% elif key == 'location' %}Enter your city{% elif key == 'education' %}Enter your qualification{% else %}Select your date of birth{% endif %}"
+                                {% if key in ['registration_no','first_name','last_name'] %}required{% endif %}>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ACADEMIC & CAREER -->
+            <div class="registration-section">
+
+                <div class="registration-section-heading">
+
+                    <div class="registration-section-icon blue-section-icon">
+                        <i class="bi bi-briefcase-fill"></i>
+                    </div>
+
+                    <div>
+                        <h3>Academic & Career Details</h3>
+                        <p>Your skills, experience and career interests</p>
+                    </div>
+
+                </div>
+
+
+                <div class="registration-fields">
+
+                    {% for key,label in [
+                        ('experience','Experience'),
+                        ('skills','Skills'),
+                        ('technical_skills','Technical Skills'),
+                        ('soft_skills','Soft Skills'),
+                        ('hobbies','Hobbies'),
+                        ('interests','Interests'),
+                        ('desired_positions','Desired Job Positions'),
+                        ('job_location','Preferred Job Location')
+                    ] %}
+
+                    <div class="registration-field">
+
+                        <label for="field_{{ key }}" class="modern-form-label">
+                            {{ label }}
+                        </label>
+
+                        <div class="modern-input-wrapper">
+
+                            <i class="bi
+                                {% if key == 'experience' %}bi-clock-history
+                                {% elif key in ['skills','technical_skills'] %}bi-code-slash
+                                {% elif key == 'soft_skills' %}bi-people
+                                {% elif key == 'hobbies' %}bi-heart
+                                {% elif key == 'interests' %}bi-stars
+                                {% elif key == 'desired_positions' %}bi-briefcase
+                                {% else %}bi-geo-alt
+                                {% endif %}
+                                modern-input-icon">
+                            </i>
+
+                            <input
+                                id="field_{{ key }}"
+                                class="modern-input"
+                                type="text"
+                                name="{{ key }}"
+                                value="{{ data.get(key,'') }}"
+                                placeholder="Enter {{ label|lower }}">
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTACT INFORMATION -->
+            <div class="registration-section">
+
+                <div class="registration-section-heading">
+
+                    <div class="registration-section-icon green-section-icon">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+
+                    <div>
+                        <h3>Contact Information</h3>
+                        <p>How recruiters and the portal can reach you</p>
+                    </div>
+
+                </div>
+
+
+                <div class="registration-fields">
+
+                    {% for key,label in [
+                        ('email','Email Address'),
+                        ('contact','Contact Number')
+                    ] %}
+
+                    <div class="registration-field">
+
+                        <label for="field_{{ key }}" class="modern-form-label">
+
+                            {{ label }}
+
+                            {% if key == 'email' %}
+                                <span class="required-star">*</span>
+                            {% endif %}
+
+                        </label>
+
+                        <div class="modern-input-wrapper">
+
+                            <i class="bi
+                                {% if key == 'email' %}bi-envelope
+                                {% else %}bi-telephone
+                                {% endif %}
+                                modern-input-icon">
+                            </i>
+
+                            <input
+                                id="field_{{ key }}"
+                                class="modern-input"
+                                name="{{ key }}"
+                                {% if key == 'email' %}type="email"
+                                {% else %}type="text"{% endif %}
+                                value="{{ data.get(key,'') }}"
+                                placeholder="{% if key == 'email' %}Enter email address{% else %}Enter contact number{% endif %}"
+                                {% if key == 'email' %}required{% endif %}>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+
+                    <!-- PASSWORD -->
+                    <div class="registration-field full-field">
+
+                        <label for="registerPassword" class="modern-form-label">
+
+                            Password
+
+                            <span class="required-star">*</span>
+
+                        </label>
+
+                        <div class="modern-input-wrapper">
+
+                            <i class="bi bi-lock modern-input-icon"></i>
+
+                            <input
+                                id="registerPassword"
+                                class="modern-input"
+                                type="password"
+                                name="password"
+                                minlength="8"
+                                placeholder="Create a password (minimum 8 characters)"
+                                autocomplete="new-password"
+                                required>
+
+                            <button type="button"
+                                    class="password-toggle"
+                                    onclick="toggleRegisterPassword()"
+                                    aria-label="Show or hide password">
+
+                                <i class="bi bi-eye" id="registerEyeIcon"></i>
+
+                            </button>
+
+                        </div>
+
+                        <div class="password-hint">
+                            <i class="bi bi-info-circle"></i>
+                            Your password must contain at least 8 characters.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+            <div class="registration-submit-section">
+
+                <button type="submit" class="registration-submit-button">
+
+                    <span>Create Student Account</span>
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+                <p class="registration-submit-note">
+                    <i class="bi bi-shield-check"></i>
+                    Your information will be submitted for registration.
+                </p>
+
+            </div>
+
+
+            <!-- LOGIN LINK -->
+            <div class="registration-login-link">
+
+                Already have an account?
+
+                <a href="/login">
+                    Sign in
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- INTERACTIVE REGISTRATION -->
+<script>
+
+    const registrationForm = document.getElementById("registrationForm");
+    const progressBar = document.getElementById("registrationProgressBar");
+    const progressText = document.getElementById("registrationProgressText");
+
+    function updateRegistrationProgress() {
+
+        const requiredFields = registrationForm.querySelectorAll("[required]");
+
+        let completed = 0;
+
+        requiredFields.forEach(function(field) {
+
+            if (field.value.trim() !== "" && field.checkValidity()) {
+                completed++;
+            }
+
+        });
+
+        const percentage = requiredFields.length
+            ? Math.round((completed / requiredFields.length) * 100)
+            : 0;
+
+        progressBar.style.width = percentage + "%";
+        progressText.textContent = percentage + "%";
+
+    }
+
+    registrationForm.addEventListener("input", updateRegistrationProgress);
+    registrationForm.addEventListener("change", updateRegistrationProgress);
+
+    updateRegistrationProgress();
+
+
+    function toggleRegisterPassword() {
+
+        const password = document.getElementById("registerPassword");
+        const icon = document.getElementById("registerEyeIcon");
+
+        if (password.type === "password") {
+
+            password.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+
+        } else {
+
+            password.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+
+        }
+
+    }
+
+</script>
+
+{% endblock %}

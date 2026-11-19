@@ -1,0 +1,274 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="student-dashboard">
+
+    <!-- WELCOME HERO -->
+    <section class="dashboard-hero">
+
+        <div class="hero-content">
+
+            <span class="hero-tag">
+                <i class="bi bi-stars"></i>
+                STUDENT DASHBOARD
+            </span>
+
+            <h1>Welcome back, {{ student.first_name }}! 👋</h1>
+
+            <p>
+                Your career journey starts here. Explore opportunities,
+                complete your profile and take your next step.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="/jobs" class="hero-btn-primary">
+                    <i class="bi bi-search"></i>
+                    Explore Jobs
+                </a>
+
+                <a href="/profile" class="hero-btn-secondary">
+                    <i class="bi bi-person-lines-fill"></i>
+                    My Profile
+                </a>
+            </div>
+
+        </div>
+
+        <div class="hero-illustration">
+            <div class="hero-illustration-circle">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <div class="hero-floating-icon icon-one">
+                <i class="bi bi-briefcase-fill"></i>
+            </div>
+            <div class="hero-floating-icon icon-two">
+                <i class="bi bi-rocket-takeoff-fill"></i>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+    <section class="dashboard-stats">
+
+        <!-- PROFILE -->
+        <div class="dashboard-stat-card">
+
+            <div class="stat-top">
+                <div class="dashboard-stat-icon purple">
+                    <i class="bi bi-person-check-fill"></i>
+                </div>
+
+                <span class="stat-label">PROFILE</span>
+            </div>
+
+            <h2>{{ percent }}<span>%</span></h2>
+
+            <p>Profile completion</p>
+
+            <div class="progress custom-progress">
+                <div class="progress-bar"
+                     role="progressbar"
+                     style="width: {{ percent }}%;"
+                     aria-valuenow="{{ percent }}"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                </div>
+            </div>
+
+            <a href="/profile" class="stat-footer-link">
+                {% if percent < 100 %}
+                    Complete your profile
+                {% else %}
+                    View your profile
+                {% endif %}
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
+
+        <!-- JOBS -->
+        <div class="dashboard-stat-card">
+
+            <div class="stat-top">
+                <div class="dashboard-stat-icon blue">
+                    <i class="bi bi-briefcase-fill"></i>
+                </div>
+
+                <span class="stat-label">OPPORTUNITIES</span>
+            </div>
+
+            <h2>{{ job_count }}</h2>
+
+            <p>Active job openings</p>
+
+            <div class="stat-decoration blue-decoration"></div>
+
+            <a href="/jobs" class="stat-footer-link">
+                Explore available jobs
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
+
+        <!-- APPLICATIONS -->
+        <div class="dashboard-stat-card">
+
+            <div class="stat-top">
+                <div class="dashboard-stat-icon green">
+                    <i class="bi bi-send-fill"></i>
+                </div>
+
+                <span class="stat-label">APPLICATIONS</span>
+            </div>
+
+            <h2>{{ applied }}</h2>
+
+            <p>Jobs you've applied for</p>
+
+            <div class="stat-decoration green-decoration"></div>
+
+            <a href="/applications" class="stat-footer-link">
+                Track your applications
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- QUICK ACTIONS -->
+    <section class="dashboard-section">
+
+        <div class="dashboard-section-heading">
+            <div>
+                <h3>Quick Actions</h3>
+                <p>Access your important student tools</p>
+            </div>
+        </div>
+
+
+        <div class="quick-action-grid">
+
+            <a href="/jobs" class="quick-action-card">
+
+                <div class="quick-action-icon purple">
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <div>
+                    <h5>Find Jobs</h5>
+                    <p>Discover new opportunities</p>
+                </div>
+
+                <i class="bi bi-arrow-up-right quick-action-arrow"></i>
+
+            </a>
+
+
+            <a href="/profile" class="quick-action-card">
+
+                <div class="quick-action-icon blue">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div>
+                    <h5>Update Profile</h5>
+                    <p>Improve your student profile</p>
+                </div>
+
+                <i class="bi bi-arrow-up-right quick-action-arrow"></i>
+
+            </a>
+
+
+            <a href="/applications" class="quick-action-card">
+
+                <div class="quick-action-icon green">
+                    <i class="bi bi-file-earmark-check-fill"></i>
+                </div>
+
+                <div>
+                    <h5>Applications</h5>
+                    <p>Check your application status</p>
+                </div>
+
+                <i class="bi bi-arrow-up-right quick-action-arrow"></i>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROFILE REMINDER -->
+    {% if percent < 100 %}
+
+    <section class="profile-reminder">
+
+        <div class="reminder-icon">
+            <i class="bi bi-lightbulb-fill"></i>
+        </div>
+
+        <div class="reminder-content">
+
+            <h4>Make your profile stand out!</h4>
+
+            <p>
+                Complete your profile to help recruiters learn more about you
+                and improve your chances of finding the right opportunity.
+            </p>
+
+            <a href="/profile" class="reminder-link">
+                Complete Profile
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
+    </section>
+
+    {% else %}
+
+    <section class="profile-reminder profile-complete-reminder">
+
+        <div class="reminder-icon">
+            <i class="bi bi-check-circle-fill"></i>
+        </div>
+
+        <div class="reminder-content">
+
+            <h4>Your profile is complete!</h4>
+
+            <p>
+                Your profile is ready. Continue exploring job openings
+                and applying to opportunities.
+            </p>
+
+            <a href="/jobs" class="reminder-link">
+                Explore Jobs
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- FOOTER MESSAGE -->
+    <div class="dashboard-bottom-message">
+        <i class="bi bi-stars"></i>
+        Every application is a step closer to your career goals.
+    </div>
+
+</div>
+
+{% endblock %}

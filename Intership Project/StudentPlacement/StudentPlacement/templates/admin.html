@@ -1,0 +1,307 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- ADMIN DASHBOARD -->
+
+<div class="admin-dashboard">
+
+    <!-- HEADER -->
+    <div class="admin-welcome">
+
+        <div>
+            <span class="admin-eyebrow">
+                <i class="bi bi-shield-check"></i>
+                ADMINISTRATION
+            </span>
+
+            <h1>Student Approvals</h1>
+
+            <p>Review student registrations and manage admission requests.</p>
+        </div>
+
+        <div class="admin-header-icon">
+            <i class="bi bi-person-check-fill"></i>
+        </div>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+    <div class="admin-stats">
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon purple">
+                <i class="bi bi-people-fill"></i>
+            </div>
+
+            <div class="admin-stat-info">
+                <span>Total Pending</span>
+                <h3>{{ students|length }}</h3>
+                <small>Awaiting review</small>
+            </div>
+
+        </div>
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon orange">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+
+            <div class="admin-stat-info">
+                <span>Pending Requests</span>
+                <h3>{{ students|length }}</h3>
+                <small>Requires your attention</small>
+            </div>
+
+        </div>
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon green">
+                <i class="bi bi-person-plus-fill"></i>
+            </div>
+
+            <div class="admin-stat-info">
+                <span>Review Queue</span>
+                <h3>{{ students|length }}</h3>
+                <small>Students in queue</small>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE SECTION -->
+    <div class="admin-panel">
+
+        <div class="admin-panel-header">
+
+            <div>
+                <h4>Registration Requests</h4>
+                <p>Review student information before approval.</p>
+            </div>
+
+            <div class="admin-panel-actions">
+
+                <div class="admin-search">
+                    <i class="bi bi-search"></i>
+
+                    <input type="text"
+                           id="studentSearch"
+                           placeholder="Search students..."
+                           autocomplete="off">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE -->
+        <div class="table-responsive admin-table-wrapper">
+
+            <table class="table admin-table" id="studentTable">
+
+                <thead>
+                    <tr>
+                        <th>REGISTRATION</th>
+                        <th>STUDENT</th>
+                        <th>EMAIL</th>
+                        <th>EDUCATION</th>
+                        <th>STATUS</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for s in students %}
+
+                    <tr class="student-row">
+
+                        <!-- REGISTRATION -->
+                        <td>
+                            <span class="registration-badge">
+                                {{ s.registration_no }}
+                            </span>
+                        </td>
+
+
+                        <!-- STUDENT -->
+                        <td>
+
+                            <div class="admin-student">
+
+                                <div class="student-avatar">
+                                    {{ s.first_name[0]|upper }}
+                                </div>
+
+                                <div class="student-info">
+
+                                    <strong>
+                                        {{ s.first_name }} {{ s.last_name }}
+                                    </strong>
+
+                                    <small>Student Applicant</small>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- EMAIL -->
+                        <td>
+                            <div class="student-email">
+                                <i class="bi bi-envelope"></i>
+                                {{ s.email }}
+                            </div>
+                        </td>
+
+
+                        <!-- EDUCATION -->
+                        <td>
+                            <span class="education-text">
+                                {{ s.education or 'Not provided' }}
+                            </span>
+                        </td>
+
+
+                        <!-- STATUS -->
+                        <td>
+                            <span class="pending-badge">
+                                <span class="status-dot"></span>
+                                Pending
+                            </span>
+                        </td>
+
+
+                        <!-- ACTIONS -->
+                        <td>
+
+                            <div class="admin-actions">
+
+                                <form method="post"
+                                      action="/admin/student/{{ s.id }}/approve"
+                                      class="approval-form">
+
+                                    <button type="submit"
+                                            class="approve-btn"
+                                            onclick="return confirm('Are you sure you want to approve this student?')">
+
+                                        <i class="bi bi-check-lg"></i>
+                                        Approve
+
+                                    </button>
+
+                                </form>
+
+
+                                <form method="post"
+                                      action="/admin/student/{{ s.id }}/reject"
+                                      class="rejection-form">
+
+                                    <button type="submit"
+                                            class="reject-btn"
+                                            onclick="return confirm('Are you sure you want to reject this student?')">
+
+                                        <i class="bi bi-x-lg"></i>
+                                        Reject
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <!-- EMPTY STATE -->
+                    <tr id="emptyRow">
+
+                        <td colspan="6">
+
+                            <div class="admin-empty">
+
+                                <div class="empty-icon">
+                                    <i class="bi bi-people"></i>
+                                </div>
+
+                                <h4>No pending students</h4>
+
+                                <p>All registration requests have been processed.</p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- TABLE FOOTER -->
+        <div class="admin-table-footer">
+
+            <span>
+                <i class="bi bi-info-circle"></i>
+                Only pending registrations are displayed.
+            </span>
+
+            <span>
+                Total:
+                <strong>{{ students|length }}</strong>
+                students
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SEARCH FUNCTION -->
+<script>
+
+    const searchInput = document.getElementById("studentSearch");
+    const studentRows = document.querySelectorAll(".student-row");
+
+    if (searchInput) {
+
+        searchInput.addEventListener("input", function () {
+
+            const searchValue = this.value.toLowerCase().trim();
+
+            studentRows.forEach(function(row) {
+
+                const rowText = row.innerText.toLowerCase();
+
+                row.style.display = rowText.includes(searchValue)
+                    ? ""
+                    : "none";
+
+            });
+
+        });
+
+    }
+
+</script>
+
+{% endblock %}

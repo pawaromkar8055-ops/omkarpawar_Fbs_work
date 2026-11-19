@@ -1,0 +1,299 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="jobs-page">
+
+    <!-- JOBS HEADER -->
+    <section class="jobs-hero">
+
+        <div class="jobs-hero-content">
+
+            <span class="jobs-hero-tag">
+                <i class="bi bi-briefcase-fill"></i>
+                CAREER OPPORTUNITIES
+            </span>
+
+            <h1>Find Your Dream Job</h1>
+
+            <p>
+                Explore opportunities, discover companies and take
+                the next step in your career.
+            </p>
+
+        </div>
+
+        <div class="jobs-hero-icon">
+            <i class="bi bi-rocket-takeoff-fill"></i>
+        </div>
+
+    </section>
+
+
+    <!-- SEARCH -->
+    <section class="jobs-search-section">
+
+        <div class="jobs-search-box">
+
+            <i class="bi bi-search"></i>
+
+            <input type="text"
+                   id="jobSearch"
+                   placeholder="Search job role, company or location..."
+                   autocomplete="off">
+
+            <button type="button"
+                    id="clearJobSearch"
+                    class="job-search-clear">
+                <i class="bi bi-x-circle"></i>
+            </button>
+
+        </div>
+
+        <div class="jobs-count">
+            <span id="jobsCount">{{ jobs|length }}</span>
+            <span> opportunities available</span>
+        </div>
+
+    </section>
+
+
+    <!-- JOB LIST -->
+    {% if not jobs %}
+
+    <div class="jobs-empty-state">
+
+        <div class="jobs-empty-icon">
+            <i class="bi bi-briefcase"></i>
+        </div>
+
+        <h3>No Jobs Available</h3>
+
+        <p>
+            New job opportunities will appear here when the
+            administrator adds them.
+        </p>
+
+    </div>
+
+    {% else %}
+
+    <div class="jobs-grid" id="jobsGrid">
+
+        {% for job in jobs %}
+
+        <article class="modern-job-card"
+                 data-search="{{ (job.role or job.job_code or '')|lower }} {{ (job.company_name or '')|lower }} {{ (job.location or '')|lower }} {{ (job.employment_type or '')|lower }}">
+
+            <!-- CARD HEADER -->
+            <div class="job-card-top">
+
+                <div class="company-avatar">
+                    <i class="bi bi-building"></i>
+                </div>
+
+                <div class="company-info">
+
+                    <h4>{{ job.company_name }}</h4>
+
+                    <span>
+                        <i class="bi bi-geo-alt"></i>
+                        {{ job.location or 'Location not specified' }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- JOB TITLE -->
+            <div class="job-card-title">
+
+                <h3>{{ job.role or job.job_code }}</h3>
+
+                <span class="job-code-badge">
+                    {{ job.job_code }}
+                </span>
+
+            </div>
+
+
+            <!-- JOB TAGS -->
+            <div class="job-card-tags">
+
+                {% if job.employment_type %}
+                <span class="job-tag employment-tag">
+                    <i class="bi bi-clock"></i>
+                    {{ job.employment_type }}
+                </span>
+                {% endif %}
+
+                {% if job.location %}
+                <span class="job-tag location-tag">
+                    <i class="bi bi-geo-alt"></i>
+                    {{ job.location }}
+                </span>
+                {% endif %}
+
+            </div>
+
+
+            <!-- PACKAGE -->
+            <div class="job-package-section">
+
+                <span class="job-package-label">
+                    OFFERED PACKAGE
+                </span>
+
+                <div class="job-package-value">
+                    <i class="bi bi-currency-rupee"></i>
+                    {{ job.package or 'Not specified' }}
+                </div>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+            <div class="job-description-preview">
+
+                <p>
+                    {{ job.job_description or 'No job description available.' }}
+                </p>
+
+            </div>
+
+
+            <!-- SKILLS -->
+            {% if job.must_have_skills %}
+
+            <div class="job-skills-preview">
+
+                <span class="skills-preview-label">
+                    REQUIRED SKILLS
+                </span>
+
+                <p>
+                    {{ job.must_have_skills }}
+                </p>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- FOOTER -->
+            <div class="job-card-footer">
+
+                <div class="job-vacancy">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    <span>
+                        {{ job.vacancy or 'N/A' }} vacancies
+                    </span>
+
+                </div>
+
+                <a href="/jobs/{{ job.id }}"
+                   class="job-details-button">
+
+                    View Details
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- NO SEARCH RESULTS -->
+    <div class="jobs-search-empty" id="jobsSearchEmpty" hidden>
+
+        <div class="jobs-empty-icon">
+            <i class="bi bi-search"></i>
+        </div>
+
+        <h3>No matching jobs found</h3>
+
+        <p>
+            Try searching with a different job role,
+            company name or location.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- FOOTER -->
+    <div class="jobs-bottom-message">
+
+        <i class="bi bi-stars"></i>
+
+        Your next career opportunity could be one click away.
+
+    </div>
+
+</div>
+
+
+<!-- JOB SEARCH -->
+<script>
+
+    const jobSearch = document.getElementById("jobSearch");
+    const clearJobSearch = document.getElementById("clearJobSearch");
+    const jobCards = document.querySelectorAll(".modern-job-card");
+    const jobsCount = document.getElementById("jobsCount");
+    const jobsSearchEmpty = document.getElementById("jobsSearchEmpty");
+
+    if (jobSearch) {
+
+        function filterJobs() {
+
+            const searchText = jobSearch.value.toLowerCase().trim();
+
+            let visibleJobs = 0;
+
+            jobCards.forEach(function(card) {
+
+                const searchData = card.dataset.search || "";
+
+                const match = searchData.includes(searchText);
+
+                card.style.display = match ? "" : "none";
+
+                if (match) {
+                    visibleJobs++;
+                }
+
+            });
+
+            jobsCount.textContent = visibleJobs;
+
+            if (jobsSearchEmpty) {
+                jobsSearchEmpty.hidden = visibleJobs !== 0;
+            }
+
+        }
+
+        jobSearch.addEventListener("input", filterJobs);
+
+        clearJobSearch.addEventListener("click", function() {
+
+            jobSearch.value = "";
+            filterJobs();
+            jobSearch.focus();
+
+        });
+
+    }
+
+</script>
+
+{% endblock %}

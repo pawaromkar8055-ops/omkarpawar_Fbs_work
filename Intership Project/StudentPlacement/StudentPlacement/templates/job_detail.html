@@ -1,0 +1,376 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="job-detail-page">
+
+
+    <!-- JOB HEADER -->
+    <section class="job-detail-hero">
+
+        <div class="job-detail-company-avatar">
+            <i class="bi bi-building"></i>
+        </div>
+
+        <div class="job-detail-hero-content">
+
+            <span class="job-detail-eyebrow">
+                JOB OPPORTUNITY
+            </span>
+
+            <h1>{{ job.role or job.job_code }}</h1>
+
+            <h4>
+                <i class="bi bi-building"></i>
+                {{ job.company_name }}
+            </h4>
+
+            <div class="job-detail-header-tags">
+
+                <span>
+                    <i class="bi bi-geo-alt-fill"></i>
+                    {{ job.location or 'Location not specified' }}
+                </span>
+
+                <span>
+                    <i class="bi bi-briefcase-fill"></i>
+                    {{ job.employment_type or 'Employment type not specified' }}
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="job-detail-header-package">
+
+            <span>PACKAGE</span>
+
+            <h3>
+                <i class="bi bi-currency-rupee"></i>
+                {{ job.package or 'Not specified' }}
+            </h3>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN LAYOUT -->
+    <div class="job-detail-layout">
+
+
+        <!-- LEFT SIDE -->
+        <div class="job-detail-main">
+
+
+            <!-- OVERVIEW -->
+            <section class="job-detail-section">
+
+                <div class="job-detail-section-heading">
+
+                    <div class="job-detail-section-icon">
+                        <i class="bi bi-info-circle-fill"></i>
+                    </div>
+
+                    <h3>Job Overview</h3>
+
+                </div>
+
+
+                <div class="job-overview-grid">
+
+                    <div class="job-overview-item">
+
+                        <span>Job Code</span>
+
+                        <strong>
+                            {{ job.job_code or 'N/A' }}
+                        </strong>
+
+                    </div>
+
+                    <div class="job-overview-item">
+
+                        <span>Vacancies</span>
+
+                        <strong>
+                            {{ job.vacancy or 'N/A' }}
+                        </strong>
+
+                    </div>
+
+                    <div class="job-overview-item">
+
+                        <span>Employment Type</span>
+
+                        <strong>
+                            {{ job.employment_type or 'N/A' }}
+                        </strong>
+
+                    </div>
+
+                    <div class="job-overview-item">
+
+                        <span>Location</span>
+
+                        <strong>
+                            {{ job.location or 'N/A' }}
+                        </strong>
+
+                    </div>
+
+                    <div class="job-overview-item">
+
+                        <span>Industry</span>
+
+                        <strong>
+                            {{ job.industry_type or 'N/A' }}
+                        </strong>
+
+                    </div>
+
+                    <div class="job-overview-item">
+
+                        <span>Department</span>
+
+                        <strong>
+                            {{ job.department or 'N/A' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- DESCRIPTION -->
+            <section class="job-detail-section">
+
+                <div class="job-detail-section-heading">
+
+                    <div class="job-detail-section-icon">
+                        <i class="bi bi-file-text-fill"></i>
+                    </div>
+
+                    <h3>Job Description</h3>
+
+                </div>
+
+                <div class="job-detail-text">
+
+                    {{ job.job_description or 'No description available.' }}
+
+                </div>
+
+            </section>
+
+
+            <!-- MUST HAVE SKILLS -->
+            <section class="job-detail-section">
+
+                <div class="job-detail-section-heading">
+
+                    <div class="job-detail-section-icon skill-icon">
+                        <i class="bi bi-code-slash"></i>
+                    </div>
+
+                    <h3>Must-have Skills</h3>
+
+                </div>
+
+                <div class="job-detail-text">
+
+                    {{ job.must_have_skills or 'Not specified.' }}
+
+                </div>
+
+            </section>
+
+
+            <!-- GOOD TO HAVE -->
+            <section class="job-detail-section">
+
+                <div class="job-detail-section-heading">
+
+                    <div class="job-detail-section-icon optional-skill-icon">
+                        <i class="bi bi-stars"></i>
+                    </div>
+
+                    <h3>Good-to-have Skills</h3>
+
+                </div>
+
+                <div class="job-detail-text">
+
+                    {{ job.good_to_have_skills or 'Not specified.' }}
+
+                </div>
+
+            </section>
+
+
+            <!-- RESPONSIBILITIES -->
+            <section class="job-detail-section">
+
+                <div class="job-detail-section-heading">
+
+                    <div class="job-detail-section-icon responsibility-icon">
+                        <i class="bi bi-list-check"></i>
+                    </div>
+
+                    <h3>Responsibilities</h3>
+
+                </div>
+
+                <div class="job-detail-text">
+
+                    {{ job.responsibilities or 'Not specified.' }}
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+        <!-- RIGHT SIDE APPLICATION -->
+        <aside class="job-apply-sidebar">
+
+            <div class="job-apply-card">
+
+                <div class="job-apply-card-header">
+
+                    <div class="apply-card-icon">
+                        <i class="bi bi-send-fill"></i>
+                    </div>
+
+                    <h3>Apply for this Job</h3>
+
+                    <p>
+                        Complete the information below to submit your application.
+                    </p>
+
+                </div>
+
+
+                <form method="post"
+                      action="/jobs/{{ job.id }}/apply"
+                      class="modern-application-form">
+
+
+                    <!-- EXPERIENCE -->
+                    <div class="modern-form-group">
+
+                        <label class="modern-form-label">
+                            Experience
+                        </label>
+
+                        <div class="modern-input-wrapper">
+
+                            <i class="bi bi-person-workspace modern-input-icon"></i>
+
+                            <select name="experience_type"
+                                    class="modern-select"
+                                    required>
+
+                                <option value="Fresher">Fresher</option>
+
+                                <option value="Experienced">Experienced</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RELOCATION -->
+                    <div class="modern-form-group">
+
+                        <label class="modern-form-label">
+                            Ready to relocate?
+                        </label>
+
+                        <div class="modern-input-wrapper">
+
+                            <i class="bi bi-geo-alt modern-input-icon"></i>
+
+                            <select name="relocate"
+                                    class="modern-select"
+                                    required>
+
+                                <option value="Yes">Yes</option>
+
+                                <option value="No">No</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- WORK DESCRIPTION -->
+                    <div class="modern-form-group">
+
+                        <label class="modern-form-label">
+                            What have you worked on?
+                        </label>
+
+                        <textarea
+                            name="work_description"
+                            class="modern-textarea"
+                            rows="5"
+                            placeholder="Describe your projects, skills, internship or experience..."
+                            required></textarea>
+
+                    </div>
+
+
+                    <!-- APPLY -->
+                    <button type="submit"
+                            class="modern-apply-button">
+
+                        <span>Submit Application</span>
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </button>
+
+
+                </form>
+
+
+                <!-- NOTE -->
+                <div class="job-apply-security">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    <span>
+                        Submit your application through the placement portal.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- BACK -->
+            <a href="/jobs" class="job-back-link">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to all jobs
+
+            </a>
+
+        </aside>
+
+
+    </div>
+
+</div>
+
+{% endblock %}
